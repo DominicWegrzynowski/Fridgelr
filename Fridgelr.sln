@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fridgelr.Server", "Server\Fridgelr.Server.csproj", "{D0AA9AFD-0383-4677-8E6C-7E4B8157D85E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fridgelr.Server", "Server\Fridgelr.Server.csproj", "{D0AA9AFD-0383-4677-8E6C-7E4B8157D85E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fridgelr.Client", "Client\Fridgelr.Client.csproj", "{8A070989-AC21-44C8-AD03-0AD635CE3AA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fridgelr.Client", "Client\Fridgelr.Client.csproj", "{8A070989-AC21-44C8-AD03-0AD635CE3AA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fridgelr.Shared", "Shared\Fridgelr.Shared.csproj", "{3C898805-11B5-401B-BD99-A4CF328BFE04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fridgelr.Shared", "Shared\Fridgelr.Shared.csproj", "{3C898805-11B5-401B-BD99-A4CF328BFE04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
