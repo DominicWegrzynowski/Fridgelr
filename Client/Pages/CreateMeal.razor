@@ -63,13 +63,24 @@
 </div>
 
 @code {
+    [CascadingParameter]
+    private RecipeState? rState { get; set; }
     private EditContext? editContext;
     private Meal meal = new();
     private List<Ingredient> ingredients = new List<Ingredient>();
 
     protected override void OnInitialized()
     {
+        if(rState is null)
+        {
+            navigationManager.NavigateTo("/", forceLoad: true);
+            return;
+        }
+
         editContext = new(meal);
+
+        meal.MealTime = rState.MealTime;
+        ingredients = rState.Ingredients;
     }
 
     private class Meal
@@ -84,7 +95,9 @@
         {
             ingredients.Add(new Ingredient()
             {
-                Id = Guid.NewGuid(),                Description = meal.Ingredient            });
+                Id = Guid.NewGuid(),
+                Description = meal.Ingredient
+            });
         }
 
         meal.Ingredient = string.Empty;
@@ -102,6 +115,8 @@
 
     private void HandleSubmit()
     {
+        rState.MealTime = meal.MealTime;
+        rState.Ingredients = ingredients;
         navigationManager.NavigateTo("/mealideas");
     }
 }
