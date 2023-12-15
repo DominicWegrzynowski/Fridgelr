@@ -1,5 +1,6 @@
 ﻿@page "/mealideas"
 @using Fridgelr.Shared
+@inject NavigationManager navigationManager
 
 @if(loaded == true)
 {
@@ -21,11 +22,29 @@
 else
 {
     <div class="container">
-        <p>Loading...</p>
+        <h3>Recipe State</h3>
+        <p>@rState.MealTime</p>
+        @foreach (var ingredient in rState.Ingredients)
+        {
+            <p>@ingredient.Description</p>
+        }
     </div>
 }
 
 @code {
     private List<Idea> ideas = new List<Idea>();
     private bool loaded = false;
+    [CascadingParameter]
+    private RecipeState rState { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if(rState is null)
+        {
+            navigationManager.NavigateTo("/", forceLoad: true);
+            return;
+        }
+        
+        
+    }
 }

@@ -115,8 +115,16 @@
 
     private void HandleSubmit()
     {
-        rState.MealTime = meal.MealTime;
-        rState.Ingredients = ingredients;
+        if (meal.MealTime is not null && rState is not null)
+        {
+            rState.MealTime = meal.MealTime;
+            rState.Ingredients = ingredients;
+        }
+        else
+        {
+            Console.WriteLine("State is null");
+        }
+
         navigationManager.NavigateTo("/mealideas");
     }
 }
