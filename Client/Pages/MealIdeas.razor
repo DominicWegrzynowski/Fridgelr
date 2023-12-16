@@ -1,6 +1,10 @@
 ﻿@page "/mealideas"
 @using Fridgelr.Shared
+@using System.Text.Json
+@using static System.Net.WebRequestMethods
 @inject NavigationManager navigationManager
+@inject HttpClient httpClient
+
 
 @if(loaded == true)
 {
@@ -12,8 +16,9 @@
                 <button class="list-group-item list-group-item-action list-group-item-success p-2">
                     <div class="d-flex w-100 justify-content-between">
                         <h2 class="mb-1 fw-bold">@idea.Title</h2>
-                        <p class="mb-1">@idea.Description</p>
                     </div>
+                    <p class="mb-1">@idea.Description</p>
+                    
                 </button>
             }
         </div>
@@ -22,20 +27,21 @@
 else
 {
     <div class="container">
-        <h3>Recipe State</h3>
-        <p>@rState.MealTime</p>
-        @foreach (var ingredient in rState.Ingredients)
-        {
-            <p>@ingredient.Description</p>
-        }
+         <p>Loading...</p>
     </div>
 }
 
 @code {
-    private List<Idea> ideas = new List<Idea>();
-    private bool loaded = false;
     [CascadingParameter]
     private RecipeState rState { get; set; }
+    private List<Idea> ideas = new List<Idea>();
+    private bool loaded = false;
+    private readonly JsonSerializerOptions _jsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+    };
 
     protected override void OnInitialized()
     {
@@ -44,7 +50,43 @@ else
             navigationManager.NavigateTo("/", forceLoad: true);
             return;
         }
-        
-        
+
+        if(rState.Ideas.Count < 1)
+        {
+            GetIdeas();
+        }
+        else
+        {
+            loaded = true;
+            ideas = rState.Ideas;
+            StateHasChanged();
+        }
+    }
+
+    private async void GetIdeas()
+    {
+        string baseuri = "Recipe/GetRecipeIdeas";
+        loaded = false;
+
+        RecipeParms recipeParms = new RecipeParms()
+        {
+            MealTime = rState.MealTime,
+            Ingredients = rState.Ingredients
+        };
+
+        try
+        {
+            HttpResponseMessage response = await httpClient.PostAsJsonAsync(baseuri, recipeParms, _jsonOptions);
+            response.EnsureSuccessStatusCode();
+            ideas = (await response.Content.ReadFromJsonAsync<List<Idea>>())!;
+            rState.Ideas = ideas;
+            loaded = true;
+            StateHasChanged();
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("Error: Could not fetch recipe ideas");
+            throw;
+        }
     }
 }
