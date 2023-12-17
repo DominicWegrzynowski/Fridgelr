@@ -1,3 +1,4 @@
+using Fridgelr.Server.Services;
 using Microsoft.AspNetCore.ResponseCompression;
 
 namespace Fridgelr
@@ -9,10 +10,10 @@ namespace Fridgelr
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            builder.Services.AddScoped<IOpenAIAPIService, OpenAIAPIService>();
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
-
+           
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
